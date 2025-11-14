@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	WSADATA wsa_data;
 	int result = WSAStartup(MAKEWORD(2,2), &wsa_data);
 	if (result != NO_ERROR) {
-		printf("Error at WSAStartup()\n");
+		printf("Errore in WSAStartup()\n");
 		return 0;
 	}
 #endif
@@ -62,16 +62,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	//checking log
-	printf("Server listening on port %d...\n", serverPort);
-
 	int my_socket;
 
 	// TODO: Create socket
 	my_socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if(my_socket < 0){
-		errorhandler("Socket creation failed.\n");
+		errorhandler("Creazione della socket fallita.\n");
 		clearwinsock();
 		return -1;
 	}
@@ -85,7 +82,7 @@ int main(int argc, char *argv[]) {
 
 	// TODO: Bind socket
 	if(bind(my_socket, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0){
-		errorhandler("bind() failed. \n");
+		errorhandler("bind() fallita. \n");
 		closesocket(my_socket);
 		clearwinsock();
 		return -1;
@@ -93,7 +90,7 @@ int main(int argc, char *argv[]) {
 
 	// TODO: Set socket to listen
 	if(listen(my_socket, QUEUE_SIZE) < 0){
-		errorhandler("listen failed. \n");
+		errorhandler("listen() fallita. \n");
 		closesocket(my_socket);
 		clearwinsock();
 		return -1;
@@ -103,6 +100,16 @@ int main(int argc, char *argv[]) {
 	srand((unsigned int)time(NULL));
 
 	// TODO: Implement connection acceptance loop
+
+	printf("\n##################################################\n");
+	printf("-----------------AVVIO WEB SERVER-----------------\n");
+	printf("##################################################\n");
+	printf("\n");
+
+	//checking log
+	printf("Server in ascolto alla porta: %d...\n", serverPort);
+	printf("\n");
+
 	while (1) {
 
 		struct sockaddr_in conn;
@@ -111,28 +118,28 @@ int main(int argc, char *argv[]) {
 
 		int client_socket;
 
-		printf("Waiting for a client connection. . . \n");
+		printf("--------------------------------------------------\n");
+		printf("In attesa della della connessione di un client... \n");
+		printf("--------------------------------------------------\n");
 		printf("\n");
 
 		client_socket = accept(my_socket, (struct sockaddr*)&conn, &addr_len);
 
 		if(client_socket < 0){
-			errorhandler("accept() failed. \n");
+			errorhandler("accept() fallita. \n");
 			continue;
 		}
-
-		printf("Client connected: %s\n", inet_ntoa(conn.sin_addr));
 
 		weather_request_t request;
 		int data_received = recv(client_socket, (char*)&request, sizeof(request), 0);
 
 		if (data_received <= 0) {
-			errorhandler("recv() failed or connection closed prematurely.\n");
+			errorhandler("recv() fallita o connessione terminata prematuramente.\n");
 			closesocket(client_socket);
 			continue;
 		}
 
-		printf("Richiesta '%c %s' dal client ip %s\n", request.type, request.city, inet_ntoa(conn.sin_addr));
+		printf(" - Richiesta '%c %s' dal client ip %s\n", request.type, request.city, inet_ntoa(conn.sin_addr));
 		printf("\n");
 
 		weather_response_t response;
@@ -178,7 +185,7 @@ int main(int argc, char *argv[]) {
 
 		closesocket(client_socket);
 	}
-	printf("Server terminated.\n");
+	printf("Server terminato.\n");
 
 	closesocket(my_socket);
 	clearwinsock();

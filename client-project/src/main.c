@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	WSADATA wsa_data;
 	int result = WSAStartup(MAKEWORD(2,2), &wsa_data);
 	if (result != NO_ERROR) {
-		printf("Error at WSAStartup()\n");
+		printf("Errore in WSAStartup()\n");
 		return 0;
 	}
 #endif
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 	        	typeCity = optarg;
 	            break;
 	        default:
-	            fprintf(stderr, "Usage: %s [-s server] [-p port] -r \"type city\"\n", argv[0]);
+	            fprintf(stderr, "Usare: %s [-s server] [-p port] -r \"type city\"\n", argv[0]);
 	            exit(EXIT_FAILURE);
 	    }
 	}
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 	// TODO: Connect to server
 	if (connect(my_socket,(struct sockaddr *) &server_addr, sizeof(server_addr)) < 0)
 	{
-		errorhandler( "Failed to connect.\n" );
+		errorhandler( "Connessione fallita.\n" );
 		closesocket(my_socket);
 		clearwinsock();
 		return 0;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 	char *city = strtok(NULL, " ");
 
 	//check if data insert into -r "..." are correct
-	if (type == NULL || city == NULL) {
+	if (type == NULL || strlen(type)>1 || city == NULL) {
 	    fprintf(stderr, "Formato non valido per -r. Usa: -r \"t city\"\n");
 	    closesocket(my_socket);
 	    clearwinsock();
@@ -133,8 +133,14 @@ int main(int argc, char *argv[]) {
 	strncpy(request.city, city, sizeof(request.city) - 1);
 
 	// INVIARE DATI AL SERVER
+
+	printf("---------------------------\n");
+	printf("Invio dati al server web... \n");
+	printf("---------------------------\n");
+	printf("\n");
+
 	if (send(my_socket, (char *)&request, sizeof(request), 0) != sizeof(request)) {
-	    errorhandler("send() sent a different number of bytes than expected");
+	    errorhandler("send() inviato un numero di byte differente rispetto a quelli attesi");
 	    closesocket(my_socket);
 	    clearwinsock();
 	    return -1;
@@ -146,14 +152,14 @@ int main(int argc, char *argv[]) {
 	int data_received = recv(my_socket, (char*)&response, sizeof(response), 0);
 
 	if (data_received <= 0) {
-		errorhandler("recv() failed or connection closed prematurely.\n");
+		errorhandler("recv() fallita o connessione terminata prematuramente.\n");
 		closesocket(my_socket);
 		return -1;
 	}
 
 
-    printf("\n--- Risposta dal server ---\n");
-    printf("Ricevuto risultato dal server ip %s.", serverAddress);
+    printf("--- Risposta dal server ---\n");
+    printf(" - Ricevuto risultato dal server ip %s.", serverAddress);
 	switch (response.status) {
 	    case SUCCESS:
 	    	printf(" %s:", request.city);
