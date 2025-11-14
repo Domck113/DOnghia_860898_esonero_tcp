@@ -11,6 +11,7 @@
 
 #if defined WIN32
 #include <winsock.h>
+#include <getopt.h>
 #else
 #include <string.h>
 #include <unistd.h>
@@ -26,8 +27,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "protocol.h"
-
-#define NO_ERROR 0
 
 void clearwinsock() {
 #if defined WIN32
@@ -108,7 +107,7 @@ int main(int argc, char *argv[]) {
 
 		struct sockaddr_in conn;
 
-		int addr_len = sizeof(conn);
+		socklen_t addr_len = sizeof(conn);
 
 		int client_socket;
 
