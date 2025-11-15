@@ -12,6 +12,7 @@
 #if defined WIN32
 #include <winsock.h>
 #include <getopt.h>
+#typedef int socklen_t;
 #else
 #include <string.h>
 #include <unistd.h>

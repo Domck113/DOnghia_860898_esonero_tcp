@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 	    }
 	}
 
-	if (typeCity == NULL || typeCity == "") {
+	if (typeCity == NULL || strlen(typeCity) == 0) {
 	        fprintf(stderr, "Errore: E' richiesto il parametro -r \"type city\"\n");
 	        exit(EXIT_FAILURE);
 	    }
