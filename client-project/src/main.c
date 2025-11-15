@@ -64,12 +64,14 @@ int main(int argc, char *argv[]) {
 	        	typeCity = optarg;
 	            break;
 	        default:
-	            fprintf(stderr, "Usare: %s [-s server] [-p port] -r \"type city\"\n", argv[0]);
+	        	printf("\n");
+	            printf("Inserire: %s [-s server] [-p port] -r \"type city\"\n", argv[0]);
+	            printf("\n");
 	            exit(EXIT_FAILURE);
 	    }
 	}
 
-	if (typeCity == NULL) {
+	if (typeCity == NULL || typeCity == "") {
 	        fprintf(stderr, "Errore: E' richiesto il parametro -r \"type city\"\n");
 	        exit(EXIT_FAILURE);
 	    }

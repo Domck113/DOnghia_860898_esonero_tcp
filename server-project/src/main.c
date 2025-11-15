@@ -57,7 +57,9 @@ int main(int argc, char *argv[]) {
 				serverPort = atoi(optarg);
 				break;
 			default:
-				fprintf(stderr, "Usage: %s [-p port]\n", argv[0]);
+				printf("\n");
+				printf("Inserire: %s [-p port]\n", argv[0]);
+				printf("\n");
 				exit(EXIT_FAILURE);
 		}
 	}
@@ -119,7 +121,7 @@ int main(int argc, char *argv[]) {
 		int client_socket;
 
 		printf("--------------------------------------------------\n");
-		printf("In attesa della della connessione di un client... \n");
+		printf("In attesa della connessione di un client... \n");
 		printf("--------------------------------------------------\n");
 		printf("\n");
 
