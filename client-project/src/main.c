@@ -159,6 +159,10 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
+	request.city[0] = toupper((unsigned char)request.city[0]);
+	for (int i = 1; request.city[i] != '\0'; i++) {
+		request.city[i] = tolower((unsigned char)request.city[i]);
+	}
 
     printf("--- Risposta dal server ---\n");
     printf(" - Ricevuto risultato dal server ip %s.", serverAddress);
